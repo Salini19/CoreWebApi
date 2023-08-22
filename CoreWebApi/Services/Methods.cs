@@ -6,11 +6,9 @@ namespace CoreWebApi.Services
 {
     public class Methods : IMethods
     {
-        private readonly IConfiguration _configuration;
-        SqlConnection cn;
-        SqlDataAdapter da;
-        DataSet ds;
-       
+        
+        private readonly SqlConnection cn;
+            
         public Methods()
         { 
        
