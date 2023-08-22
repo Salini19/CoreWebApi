@@ -24,15 +24,15 @@ namespace CoreWebApi.Controllers
 
         // GET: Employees
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             List<Employee> employees = imethods.GetAllEmployees();
 
-            return View(employees);
+            return Ok(employees);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Details(int id)
+        public IActionResult Details(int id)
         {
             Employee employee = imethods.GetEmployeeByID(id);
             if (employee == null)
@@ -41,7 +41,7 @@ namespace CoreWebApi.Controllers
             }
 
 
-            return View(employee);
+            return Ok(employee);
         }
 
         [HttpPost]
@@ -53,14 +53,14 @@ namespace CoreWebApi.Controllers
 
 
         [HttpPut]
-        public async Task<IActionResult> Edit( Employee employee)
+        public IActionResult Edit( Employee employee)
         {
             imethods.UpdateEmployee(employee);
             return Ok(employee);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public IActionResult Delete(int id)
         {
             imethods.DeleteEmp(id);
             return Ok();

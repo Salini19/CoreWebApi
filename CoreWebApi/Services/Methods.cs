@@ -23,7 +23,7 @@ namespace CoreWebApi.Services
             try
             {
                
-                var query = "Insert into EMpInfo (Id,Name,Email,Mobile) values (@Id,@Name,@Email,@Mobile)";
+                var query = "Insert into EmpInfo (Id,Name,Email,Mobile) values (@Id,@Name,@Email,@Mobile)";
                
                 cn.Open();
                 using (SqlCommand cmd = new SqlCommand(query, cn))
@@ -56,48 +56,36 @@ namespace CoreWebApi.Services
 
         public List<Employee> GetAllEmployees()
         {
-            //List<Employee> emplist = new List<Employee>();
-            //SqlCommand cmd = new SqlCommand("Select * from EmpInfo", cn);
-            //SqlDataReader dr = cmd.ExecuteReader();
-
-            //if (dr.HasRows)
-            //{
-            //    while (dr.Read())
-            //    {
-
-            //        Employee emp = new Employee();
-            //        emp.Id = Convert.ToInt32(dr["Id"]);
-            //        emp.Name = dr["Name"].ToString();
-            //        emp.Email = dr["Email"].ToString();
-            //        emp.Mobile = dr["Mobile"].ToString();
-
-            //        emplist.Add(emp);
-
-
-            //    }
-            //}
+            List<Employee> emplist = new List<Employee>();
+            SqlCommand cmd = new SqlCommand("Select * from EmpInfo", cn);
             cn.Open();
-            da = new SqlDataAdapter("Select * from EmpInfo", cn);
-            da.Fill(ds, "Employees");
-            DataTable dt = ds.Tables[0];
+            SqlDataReader dr = cmd.ExecuteReader();
 
-            return (from DataRow dr in dt.Rows
-                    select new Employee()
-                    {
-                        Id = Convert.ToInt32(dr["Id"]),
-                        Name = dr["Name"].ToString(),
-                        Email = dr["Email"].ToString(),
-                        Mobile = dr["Mobile"].ToString()
-                    }).ToList();
-            
-            cn.Close() ;
+            if (dr.HasRows)
+            {
+                while (dr.Read())
+                {
+
+                    Employee emp = new Employee();
+                    emp.Id = Convert.ToInt32(dr["Id"]);
+                    emp.Name = dr["Name"].ToString();
+                    emp.Email = dr["Email"].ToString();
+                    emp.Mobile = dr["Mobile"].ToString();
+
+                    emplist.Add(emp);
+
+
+                }
+            }
+            cn.Close();
+            return emplist;
         }
 
         public Employee GetEmployeeByID(int employeeId)
         {
-            cn.Open();
+          
             SqlCommand cmd = new SqlCommand($"Select * from EmpInfo Where Id={employeeId}", cn);
-            
+            cn.Open();
             SqlDataReader dr= cmd.ExecuteReader();
 
             Employee emp = new Employee();
