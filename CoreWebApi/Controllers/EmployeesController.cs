@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using CoreWebApi;
 using CoreWebApi.Models;
 using CoreWebApi.Services;
+using Microsoft.AspNetCore.Mvc.Razor;
+using AutoMapper;
 
 namespace CoreWebApi.Controllers
 {
@@ -16,10 +18,12 @@ namespace CoreWebApi.Controllers
     public class EmployeesController : Controller
     {
         private readonly IMethods imethods;
+        private readonly IMapper _mapper;
 
-        public EmployeesController(IMethods methods)
+        public EmployeesController(IMethods methods,IMapper mapper)
         {
             imethods = methods;
+            _mapper = mapper;
         }
 
         // GET: Employees
@@ -27,28 +31,32 @@ namespace CoreWebApi.Controllers
         public IActionResult Index()
         {
             List<Employee> employees = imethods.GetAllEmployees();
-
-            return Ok(employees);
+            //return Ok(employees);  
+            var empViewModel = _mapper.Map<List<EmpViewModel>>(employees);
+            return Ok(empViewModel);
         }
 
         [HttpGet("{id}")]
         public IActionResult Details(int id)
         {
             Employee employee = imethods.GetEmployeeByID(id);
-            if (employee == null)
-            {
-                return NotFound();
-            }
+            var empViewModel = _mapper.Map<EmpViewModel>(employee);
 
 
-            return Ok(employee);
+            return Ok(empViewModel);
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] Employee employee)
+        public IActionResult Create([FromBody] EmpViewModel employee)
         {
-            imethods.AddEmp(employee);
-            return Ok(employee);
+          var emp=  _mapper.Map<Employee>(employee);
+            Random r = new Random();
+            emp.Id= r.Next();
+            emp.Mobile = "7829090209";
+            imethods.AddEmp(emp);
+            return Ok(emp);
+            //imethods.AddEmp(employee);
+            //return Ok(employee);
         }
 
 
@@ -64,10 +72,6 @@ namespace CoreWebApi.Controllers
         {
             imethods.DeleteEmp(id);
             return Ok();
-        }
-
-       
-
-        
+        }        
     }
 }

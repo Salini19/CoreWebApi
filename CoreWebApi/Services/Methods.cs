@@ -71,8 +71,6 @@ namespace CoreWebApi.Services
                     emp.Mobile = dr["Mobile"].ToString();
 
                     emplist.Add(emp);
-
-
                 }
             }
             cn.Close();
@@ -87,6 +85,7 @@ namespace CoreWebApi.Services
             SqlDataReader dr= cmd.ExecuteReader();
 
             Employee emp = new Employee();
+            
             if (dr.Read())
             {
                 emp.Id = Convert.ToInt32(dr["Id"]);
@@ -96,6 +95,7 @@ namespace CoreWebApi.Services
             }
 
             cn.Close();
+
             return emp;
         }
 
