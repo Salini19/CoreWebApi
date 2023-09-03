@@ -1,4 +1,3 @@
-
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using CoreWebApi;
@@ -19,18 +18,19 @@ builder.Services.AddSwaggerGen();
 
 
 
-builder.Services.AddTransient<IMethods,Methods>();
-var app = builder.Build();
+//builder.Services.AddTransient<IMethods,Methods>();
+
 
 // Autofac Registrations
-//builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
-// Call ConfigureContainer on the Host sub property 
-//builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
-//{
-//    builder.RegisterModule(new AutofacModule());
-//});
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
+//Call ConfigureContainer on the Host sub property 
+builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
+{
+    builder.RegisterModule(new AutofacModule());
+});
+var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

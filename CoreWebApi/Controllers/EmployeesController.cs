@@ -15,14 +15,14 @@ namespace CoreWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmployeesController : Controller
+    public class EmployeesController : ControllerBase
     {
-        private readonly IMethods imethods;
+        private readonly IMethods _imethods;
         private readonly IMapper _mapper;
 
-        public EmployeesController(IMethods methods,IMapper mapper)
+        public EmployeesController(IMethods imethods,IMapper mapper)
         {
-            imethods = methods;
+            _imethods = imethods;
             _mapper = mapper;
         }
 
@@ -30,7 +30,7 @@ namespace CoreWebApi.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            List<Employee> employees = imethods.GetAllEmployees();
+            List<Employee> employees = _imethods.GetAllEmployees();
             //return Ok(employees);  
             var empViewModel = _mapper.Map<List<EmpViewModel>>(employees);
             return Ok(empViewModel);
@@ -39,7 +39,7 @@ namespace CoreWebApi.Controllers
         [HttpGet("{id}")]
         public IActionResult Details(int id)
         {
-            Employee employee = imethods.GetEmployeeByID(id);
+            Employee employee = _imethods.GetEmployeeByID(id);
             var empViewModel = _mapper.Map<EmpViewModel>(employee);
 
 
@@ -53,7 +53,7 @@ namespace CoreWebApi.Controllers
             Random r = new Random();
             emp.Id= r.Next();
             emp.Mobile = "7829090209";
-            imethods.AddEmp(emp);
+            _imethods.AddEmp(emp);
             return Ok(emp);
             //imethods.AddEmp(employee);
             //return Ok(employee);
@@ -63,14 +63,14 @@ namespace CoreWebApi.Controllers
         [HttpPut]
         public IActionResult Edit( Employee employee)
         {
-            imethods.UpdateEmployee(employee);
+            _imethods.UpdateEmployee(employee);
             return Ok(employee);
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            imethods.DeleteEmp(id);
+            _imethods.DeleteEmp(id);
             return Ok();
         }        
     }
